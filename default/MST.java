@@ -273,7 +273,6 @@ class MSTworld {
     // directional (X or Y) and rotational (clockwise, counterclockwise)
     // orientation.  The following constants get plugged into the
     // parameter slots.
-    private static final int PARALLEL_THRESHOLD = 500; 
     private static final int xdim = 0;
     private static final int ydim = 1;
     private static final int ccw = 0;
@@ -301,7 +300,7 @@ class MSTworld {
     private final SortedSet<edge> edges;
         // Used for rendering.  Ordering supports the KruskalSolve stage.
     private long sd = 0;
-    private final Random prn;     // pseudo-random number generator 
+    private final Random prn;     // pseudo-random number generator
 
     // Constructor
     //
@@ -679,26 +678,6 @@ class MSTworld {
     // at successive levels of recursion, to minimize the number of long
     // edges that are likely to be broken when stitching.
     //
-    //After fields, Parallelize Dwyer's algorithm
-        private class TriangulateWorker extends Thread {
-        private final int l, r, low0, high0, low1, high1, parity;
-        TriangulateWorker(int l, int r,
-                        int low0, int high0,
-                        int low1, int high1,
-                        int parity) {
-            this.l = l; this.r = r;
-            this.low0 = low0; this.high0 = high0;
-            this.low1 = low1; this.high1 = high1;
-            this.parity = parity;
-        }
-        public void run() {
-            try {
-                coord.register();
-                triangulate(l, r, low0, high0, low1, high1, parity);
-                coord.unregister();
-            } catch (Coordinator.KilledException e) { /* clean up */ }
-        }
-    }
     private void triangulate(int l, int r, int low0, int high0,
                              int low1, int high1, int parity)
         throws Coordinator.KilledException {
